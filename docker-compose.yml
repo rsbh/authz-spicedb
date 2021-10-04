@@ -7,4 +7,4 @@ services:
       - 8080:8080
       - 50051:50051
       - 50053:50053
-    command: spicedb serve --grpc-preshared-key "somerandomkeyhere" --grpc-no-tls
+    command: spicedb serve-testing
