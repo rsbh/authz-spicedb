@@ -6,18 +6,9 @@ import (
 	"log"
 
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
-	authzed "github.com/authzed/authzed-go/v0"
-	"google.golang.org/grpc"
 )
 
-func Add() {
-	client, err := authzed.NewClient(
-		"localhost:50051",
-		grpc.WithInsecure(),
-	)
-	if err != nil {
-		log.Fatalf("unable to initialize client: %s", err)
-	}
+func (h *PermissionHandler) Add() {
 
 	request := &pb.WriteRequest{Updates: []*pb.RelationTupleUpdate{
 		{ // Emilia is a Writer on Post 1
@@ -37,7 +28,7 @@ func Add() {
 		},
 	}}
 
-	resp, err := client.Write(context.Background(), request)
+	resp, err := h.client.Write(context.Background(), request)
 
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)

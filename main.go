@@ -7,6 +7,8 @@ import (
 
 func main() {
 	schema.Read()
-	permission.Add()
-	permission.Check()
+
+	ph := permission.NewHandler()
+	ph.Add()
+	ph.Check()
 }
