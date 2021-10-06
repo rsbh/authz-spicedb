@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/rsbh/authz-spicedb/internal/permission"
-	"github.com/rsbh/authz-spicedb/internal/schema"
+	"github.com/rsbh/authz-spicedb/internal/authz"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	schema.Read()
-
-	ph := permission.NewHandler()
-	ph.Add()
-	ph.Check()
+	a := authz.New(
+		"localhost:50051",
+		grpc.WithInsecure(),
+	)
+	a.Schema.Load()
+	a.Permission.Add()
+	a.Permission.Check()
 }

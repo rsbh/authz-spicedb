@@ -8,7 +8,7 @@ import (
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
 )
 
-func (h *PermissionHandler) Add() {
+func (p *Permission) Add() {
 
 	request := &pb.WriteRequest{Updates: []*pb.RelationTupleUpdate{
 		{ // Emilia is a Writer on Post 1
@@ -28,7 +28,7 @@ func (h *PermissionHandler) Add() {
 		},
 	}}
 
-	resp, err := h.client.Write(context.Background(), request)
+	resp, err := p.client.Write(context.Background(), request)
 
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)

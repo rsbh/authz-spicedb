@@ -8,7 +8,7 @@ import (
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
 )
 
-func (h *PermissionHandler) Check() {
+func (p Permission) Check() {
 
 	ctx := context.Background()
 
@@ -20,7 +20,7 @@ func (h *PermissionHandler) Check() {
 
 	post1Reader := &pb.ObjectAndRelation{Namespace: "blog/post", ObjectId: "1", Relation: "reader"}
 
-	resp, err := h.client.Check(ctx, &pb.CheckRequest{User: emilia, TestUserset: post1Reader})
+	resp, err := p.client.Check(ctx, &pb.CheckRequest{User: emilia, TestUserset: post1Reader})
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)
 	}

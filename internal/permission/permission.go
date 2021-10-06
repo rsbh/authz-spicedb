@@ -7,22 +7,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-type PermissionHandler struct {
+type Permission struct {
 	client *authzed.Client
 }
 
-func NewHandler() *PermissionHandler {
-	client, err := authzed.NewClient(
-		"localhost:50051",
-		grpc.WithInsecure(),
-	)
+func New(endpoint string, opts ...grpc.DialOption) *Permission {
+	client, err := authzed.NewClient(endpoint, opts...)
+
 	if err != nil {
 		log.Fatalf("unable to initialize client: %s", err)
 	}
 
-	handler := &PermissionHandler{
+	return &Permission{
 		client: client,
 	}
-
-	return handler
 }
