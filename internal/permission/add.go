@@ -4,33 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 
-	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
+	pb "github.com/authzed/authzed-go/proto/authzed/api/v1"
+	"github.com/authzed/spicedb/pkg/tuple"
 )
 
-func (p *Permission) Add(object string, subject string, relation string) {
-	o := strings.Split(object, ":")
-	s := strings.Split(subject, ":")
-	request := &pb.WriteRequest{Updates: []*pb.RelationTupleUpdate{
+func (p *Permission) Add(str string) {
+	request := &pb.WriteRelationshipsRequest{Updates: []*pb.RelationshipUpdate{
 		{
-			Operation: pb.RelationTupleUpdate_CREATE,
-			Tuple: &pb.RelationTuple{
-				User: &pb.User{UserOneof: &pb.User_Userset{Userset: &pb.ObjectAndRelation{
-					Namespace: s[0],
-					ObjectId:  s[1],
-					Relation:  "...",
-				}}},
-				ObjectAndRelation: &pb.ObjectAndRelation{
-					Namespace: o[0],
-					ObjectId:  o[1],
-					Relation:  relation,
-				},
-			},
+			Operation:    pb.RelationshipUpdate_OPERATION_CREATE,
+			Relationship: tuple.ParseRel(str),
 		},
 	}}
 
-	resp, err := p.client.Write(context.Background(), request)
+	resp, err := p.client.WriteRelationships(context.Background(), request)
 
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)

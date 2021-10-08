@@ -3,35 +3,25 @@ package permission
 import (
 	"context"
 	"fmt"
+	"github.com/authzed/spicedb/pkg/tuple"
 	"log"
-	"strings"
 
-	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
+	pb "github.com/authzed/authzed-go/proto/authzed/api/v1"
 )
 
-func (p Permission) Check(object string, subject string, relation string) {
-	o := strings.Split(object, ":")
-	s := strings.Split(subject, ":")
+func (p Permission) Check(str string) {
 	ctx := context.Background()
-
-	resp, err := p.client.Check(ctx, &pb.CheckRequest{
-		User: &pb.User{
-			UserOneof: &pb.User_Userset{
-				Userset: &pb.ObjectAndRelation{
-					Namespace: s[0],
-					ObjectId:  s[1],
-					Relation:  "...",
-				}}},
-		TestUserset: &pb.ObjectAndRelation{
-			Namespace: o[0],
-			ObjectId:  o[1],
-			Relation:  relation,
-		}})
+	rel := tuple.ParseRel(str)
+	resp, err := p.client.CheckPermission(ctx, &pb.CheckPermissionRequest{
+		Resource:   rel.Resource,
+		Subject:    rel.Subject,
+		Permission: rel.Relation,
+	})
 
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)
 	}
 
-	fmt.Println(resp)
+	fmt.Println(resp.GetPermissionship())
 
 }

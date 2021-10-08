@@ -11,8 +11,14 @@ func main() {
 		grpc.WithInsecure(),
 	)
 	a.Schema.Load()
-	a.Permission.Add("group:g1", "user:user1", "member")
-	a.Permission.Check("group:g1", "user:user1", "member")
-	a.Permission.Check("group:g1", "user:user2", "member")
+	a.Permission.Add("group:g1#member@user:u1")
+	a.Permission.Add("group:f_admins#member@user:u2")
+	a.Permission.Add("resource/firehose:f1#manager@group:g1")
+	a.Permission.Add("project:p1#firehose_admins@group:f_admins#member")
+	a.Permission.Add("resource/firehose:f1#manager@project:p1#firehose_admins")
+	//
+	a.Permission.Check("group:g1#view@user:u1")
+	a.Permission.Check("resource/firehose:f1#manage@user:u1")
+	a.Permission.Check("resource/firehose:f1#manage@user:u2")
 
 }

@@ -3,7 +3,7 @@ package permission
 import (
 	"log"
 
-	authzed "github.com/authzed/authzed-go/v0"
+	authzed "github.com/authzed/authzed-go/v1"
 	"google.golang.org/grpc"
 )
 
