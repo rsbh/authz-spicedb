@@ -4,25 +4,27 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v0"
 )
 
-func (p *Permission) Add() {
-
+func (p *Permission) Add(object string, subject string, relation string) {
+	o := strings.Split(object, ":")
+	s := strings.Split(subject, ":")
 	request := &pb.WriteRequest{Updates: []*pb.RelationTupleUpdate{
-		{ // Emilia is a Writer on Post 1
+		{
 			Operation: pb.RelationTupleUpdate_CREATE,
 			Tuple: &pb.RelationTuple{
 				User: &pb.User{UserOneof: &pb.User_Userset{Userset: &pb.ObjectAndRelation{
-					Namespace: "blog/user",
-					ObjectId:  "emilia",
+					Namespace: s[0],
+					ObjectId:  s[1],
 					Relation:  "...",
 				}}},
 				ObjectAndRelation: &pb.ObjectAndRelation{
-					Namespace: "blog/post",
-					ObjectId:  "1",
-					Relation:  "writer",
+					Namespace: o[0],
+					ObjectId:  o[1],
+					Relation:  relation,
 				},
 			},
 		},

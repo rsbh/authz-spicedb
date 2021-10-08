@@ -11,6 +11,8 @@ func main() {
 		grpc.WithInsecure(),
 	)
 	a.Schema.Load()
-	a.Permission.Add()
-	a.Permission.Check()
+	a.Permission.Add("group:g1", "user:user1", "member")
+	a.Permission.Check("group:g1", "user:user1", "member")
+	a.Permission.Check("group:g1", "user:user2", "member")
+
 }
