@@ -1,23 +1,14 @@
 package schema
 
 import (
+	"context"
+	"fmt"
 	"log"
 
-	authzed "github.com/authzed/authzed-go/v1alpha1"
+	pb "github.com/authzed/authzed-go/proto/authzed/api/v1"
+	authzed "github.com/authzed/authzed-go/v1"
 	"google.golang.org/grpc"
 )
-
-const schema = `
-definition blog/user {}
-
-definition blog/post {
-    relation reader: blog/user
-    relation writer: blog/user
-
-    permission read = reader + writer
-    permission write = writer
-}
-`
 
 type Schema struct {
 	client *authzed.Client
@@ -33,4 +24,23 @@ func New(endpoint string, opts ...grpc.DialOption) *Schema {
 	return &Schema{
 		client: client,
 	}
+}
+
+func (s *Schema) Load() {
+
+	request := &pb.WriteSchemaRequest{Schema: schema}
+	resp, err := s.client.WriteSchema(context.Background(), request)
+	if err != nil {
+		log.Fatalf("failed to write schema: %s", err)
+	}
+	fmt.Println("Output", resp)
+}
+
+func (s *Schema) Read() {
+	request := &pb.ReadSchemaRequest{}
+	resp, err := s.client.ReadSchema(context.Background(), request)
+	if err != nil {
+		log.Fatalf("failed to write schema: %s", err)
+	}
+	fmt.Println(resp)
 }
