@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/rsbh/authz-spicedb/internal/authz"
 	"google.golang.org/grpc"
 )
@@ -21,4 +23,12 @@ func main() {
 	a.Permission.Check("resource/firehose:f1#manage@user:u1")
 	a.Permission.Check("resource/firehose:f1#manage@user:u2")
 
+	time.Sleep(3 * time.Second)
+	a.Permission.Remove("group")
+
+
+	time.Sleep(3 * time.Second)
+	a.Permission.Check("group:g1#view@user:u1")
+	a.Permission.Check("resource/firehose:f1#manage@user:u1")
+	a.Permission.Check("resource/firehose:f1#manage@user:u2")
 }

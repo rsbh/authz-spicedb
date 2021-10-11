@@ -25,3 +25,18 @@ func (p *Permission) Add(str string) {
 
 	fmt.Println(resp)
 }
+
+func (p *Permission) Remove(resourceType string) {
+	request := &pb.DeleteRelationshipsRequest{
+		RelationshipFilter: &pb.RelationshipFilter{
+							ResourceType: resourceType,
+	}}
+
+	resp, err := p.client.DeleteRelationships(context.Background(), request)
+
+	if err != nil {
+		log.Fatalf("failed to check permission: %s", err)
+	}
+
+	fmt.Println(resp)
+}
