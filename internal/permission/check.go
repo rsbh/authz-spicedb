@@ -2,14 +2,13 @@ package permission
 
 import (
 	"context"
-	"fmt"
 	"github.com/authzed/spicedb/pkg/tuple"
 	"log"
 
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v1"
 )
 
-func (p Permission) Check(str string) {
+func (p Permission) Check(str string) bool {
 	ctx := context.Background()
 	rel := tuple.ParseRel(str)
 	resp, err := p.client.CheckPermission(ctx, &pb.CheckPermissionRequest{
@@ -22,6 +21,5 @@ func (p Permission) Check(str string) {
 		log.Fatalf("failed to check permission: %s", err)
 	}
 
-	fmt.Println(resp.GetPermissionship())
-
+	return resp.GetPermissionship() == pb.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 }
