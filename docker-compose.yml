@@ -1,10 +1,21 @@
 version: "3.7"
 
 services:
-  spicedb:
-    image: quay.io/authzed/spicedb:v1.0.0
+#   spicedb:
+#     image: quay.io/authzed/spicedb:v1.0.0
+#     ports:
+#       - 8080:8080
+#       - 50051:50051
+#       - 50053:50053
+#     command: spicedb serve-testing
+  
+  postgres:
+    image: 'postgres:13'
+    environment:
+      POSTGRES_USER: 'shield_dev'
+      POSTGRES_DB: 'shield_dev'
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
+    # volumes:
+    #   - ./.temp/pgdata:/var/lib/postgresql/data
     ports:
-      - 8080:8080
-      - 50051:50051
-      - 50053:50053
-    command: spicedb serve-testing
+      - 5432:5432
