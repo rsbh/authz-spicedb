@@ -2,7 +2,7 @@ package permission
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"log"
 
 	pb "github.com/authzed/authzed-go/proto/authzed/api/v1"
@@ -17,11 +17,11 @@ func (p *Permission) Add(str string) {
 		},
 	}}
 
-	resp, err := p.client.WriteRelationships(context.Background(), request)
+	_, err := p.client.WriteRelationships(context.Background(), request)
 
 	if err != nil {
 		log.Fatalf("failed to check permission: %s", err)
 	}
 
-	fmt.Println(resp)
+	// fmt.Println(resp)
 }

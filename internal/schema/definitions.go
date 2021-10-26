@@ -9,7 +9,7 @@ definition group {
 }
 
 definition resource/firehose {
-   relation manager: group | project#firehose_admins
+   relation manager: group | project#firehose_admins | group#member
    permission manage = manager + manager->member + manager->firehose_admins
 }
 
