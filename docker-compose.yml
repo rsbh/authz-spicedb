@@ -1,6 +1,11 @@
 version: "3.7"
 
 services:
+  spicedb-migration:
+    image: quay.io/authzed/spicedb:v1.0.0
+    command: spicedb migrate head --datastore-engine postgres --datastore-conn-uri postgres://spicedb:@postgres:5432/spicedb?sslmode=disable
+    depends_on:
+      - postgres
   spicedb:
     image: quay.io/authzed/spicedb:v1.0.0
     ports:
@@ -8,10 +13,11 @@ services:
       - 50051:50051
       - 50053:50053
     command:
-      spicedb serve --grpc-preshared-key "somerandomkeyhere" --grpc-no-tls --datastore-engine postgres
+      spicedb serve --grpc-preshared-key "shield" --grpc-no-tls --datastore-engine postgres
       --datastore-conn-uri postgres://spicedb:@postgres:5432/spicedb?sslmode=disable
     depends_on:
       - postgres
+      - spicedb-migration
   postgres:
     image: "postgres:13"
     environment:
