@@ -1,20 +1,23 @@
 version: "3.7"
 
 services:
-#   spicedb:
-#     image: quay.io/authzed/spicedb:v1.0.0
-#     ports:
-#       - 8080:8080
-#       - 50051:50051
-#       - 50053:50053
-#     command: spicedb serve-testing
-  
+  spicedb:
+    image: quay.io/authzed/spicedb:v1.0.0
+    ports:
+      - 8080:8080
+      - 50051:50051
+      - 50053:50053
+    command:
+      spicedb serve --grpc-preshared-key "somerandomkeyhere" --grpc-no-tls --datastore-engine postgres
+      --datastore-conn-uri postgres://spicedb:@postgres:5432/spicedb?sslmode=disable
+    depends_on:
+      - postgres
   postgres:
-    image: 'postgres:13'
+    image: "postgres:13"
     environment:
-      POSTGRES_USER: 'shield_dev'
-      POSTGRES_DB: 'shield_dev'
-      POSTGRES_HOST_AUTH_METHOD: 'trust'
+      POSTGRES_USER: "spicedb"
+      POSTGRES_DB: "spicedb"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
     # volumes:
     #   - ./.temp/pgdata:/var/lib/postgresql/data
     ports:
